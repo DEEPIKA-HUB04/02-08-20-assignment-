@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OMBD Api</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+</head>
+<body>
+ <div class="container">
+    <p class="h1">Movie Search</p>
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" placeholder="search"  id="input">
+        <div class="input-group-append">
+          <button class="btn btn-outline-secondary" type="button" id="Search" onclick="myfunction()">CLICK</button>
+        </div>
+    </div>
+    <div>
+ <a id="area"> GET POSTER</a>
+    </div>
+ </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <script>
+        
+function myfunction(){
+    var value = document.getElementById("input").value;
+    console.log(value);
+
+     var url = ""
+     var urlValue = " https://www.omdbapi.com/?t="
+     var key = "&apikey=9c396bbb"
+     
+     url += urlValue+value+key
+     fetch(url).then((response) =>{
+        console.log(response)
+        return response.json()
+     }).then((data) => {
+       displayPoster(data.Poster)
+     }).catch((error) =>{
+         console.log(error)
+     })
+    
+}
+
+ function displayPoster (info){
+    document.getElementById("area").href = info
+console.log(info)
+ }
+    </script>
+    </body>
+</html>

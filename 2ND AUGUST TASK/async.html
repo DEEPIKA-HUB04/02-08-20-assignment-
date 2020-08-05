@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rest countries using ASYN/AWAIT</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+</head>
+<body>
+    <div class = "container" id="contain">
+         <div class="row" id = "row">
+         </div> 
+    </div>
+   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+       <script>
+         // ASYNC FUNCTION
+
+        async function getCountries() {
+    try {
+    var response = await fetch("https://restcountries.eu/rest/v2/all")
+    var data = await response.json();
+    return  data;
+    }
+    catch (error) {
+         console.log(error)
+    }
+}
+getCountries().then((result) => {
+    country( result);
+})
+
+
+function country (resource){
+    var design = "";
+    var No = 1;
+    var row = document.querySelector("#row")        
+    
+    for(i=0;i<resource.length;i++){
+    
+    row.setAttribute("class" , "row mt-3")
+    var column = document.createElement("div");
+    column.setAttribute("class" , "col col-sm-2 col-md-4 col-lg-3 col-xl-3 mt-4");
+    
+    design = `<div class = "card" style = "height: 400px;">
+           
+        <div class="card-header text-center">
+          ${No}). ${resource[i].name}
+          </div>
+          <img src = "${resource[i].flag}" style="width: 100% ;height: 40% ;" >
+          <div class = "card-body bg bg-success">
+            <p class="card-text">
+              <strong>  Capital: </strong> <span> ${resource[i].capital} </span><br>
+                   <strong>  Country Codes: </strong> <span> ${resource[i].alpha2Code}, ${resource[i].alpha3Code}</span><br>
+                              <strong> Region:  </strong> <span> ${resource[i].region}</span>
+                                </p>
+                            </div>
+           <div class="card-footer">
+              <button class="btn  btn-primary text-center" style="width: 200px ;height: 50px ;" 
+               onclick="getWeather('${resource[i].name}')">View Current Weather</button>
+                            </div>
+                        </div>
+                        `;
+        
+       column.innerHTML = design;
+        row.appendChild(column)
+      contain.appendChild(row)
+      No++;
+    }
+      }
+    
+      // FUNCTION TO GET WEATHER DATA
+async function getWeather (name) {
+          
+      var urlValues = '';
+      var weatherURL = "https://api.openweathermap.org/data/2.5/weather?q=";
+     var weatherAPIKey =  '&appid=c2ced9676970e9a1ded8c80ad6c034a3';
+     var weatherMetric = '&units=metric';
+      urlValues += weatherURL + name  + weatherAPIKey + weatherMetric ;
+      console.log(urlValues)
+    
+try{
+var url = await fetch(urlValues)
+var res = await url.json()
+alert(' Country: ' + res.name + ' and Temperature(in celsius) ' + res.main.temp);
+}
+
+catch (err) {
+  alert("Data not found, Try again!");
+}
+}
+    </script>
+    
+</body>
+</html>
